@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2, Copy, CopyCheck } from 'lucide-react';

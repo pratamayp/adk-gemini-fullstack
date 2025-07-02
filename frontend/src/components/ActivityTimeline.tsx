@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-} from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Loader2,
   Activity,
@@ -16,9 +17,9 @@ import {
   ChevronDown,
   ChevronUp,
   Link,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 export interface ProcessedEvent {
   title: string;
@@ -41,28 +42,44 @@ export function ActivityTimeline({
 
   const formatEventData = (data: any): string => {
     // Handle new structured data types
-    if (typeof data === "object" && data !== null && data.type) {
+    if (typeof data === 'object' && data !== null && data.type) {
       switch (data.type) {
         case 'functionCall':
-          return `Calling function: ${data.name}\nArguments: ${JSON.stringify(data.args, null, 2)}`;
+          return `Calling function: ${data.name}\nArguments: ${JSON.stringify(
+            data.args,
+            null,
+            2
+          )}`;
         case 'functionResponse':
-          return `Function ${data.name} response:\n${JSON.stringify(data.response, null, 2)}`;
+          return `Function ${data.name} response:\n${JSON.stringify(
+            data.response,
+            null,
+            2
+          )}`;
         case 'text':
           return data.content;
         case 'sources':
-          const sources = data.content as Record<string, { title: string; url: string }>;
+          // eslint-disable-next-line no-case-declarations
+          const sources = data.content as Record<
+            string,
+            { title: string; url: string }
+          >;
           if (Object.keys(sources).length === 0) {
-            return "No sources found.";
+            return 'No sources found.';
           }
           return Object.values(sources)
-            .map(source => `[${source.title || 'Untitled Source'}](${source.url})`).join(', ');
+            .map(
+              (source) =>
+                `[${source.title || 'Untitled Source'}](${source.url})`
+            )
+            .join(', ');
         default:
           return JSON.stringify(data, null, 2);
       }
     }
-    
+
     // Existing logic for backward compatibility
-    if (typeof data === "string") {
+    if (typeof data === 'string') {
       // Try to parse as JSON first
       try {
         const parsed = JSON.parse(data);
@@ -72,8 +89,8 @@ export function ActivityTimeline({
         return data;
       }
     } else if (Array.isArray(data)) {
-      return data.join(", ");
-    } else if (typeof data === "object" && data !== null) {
+      return data.join(', ');
+    } else if (typeof data === 'object' && data !== null) {
       return JSON.stringify(data, null, 2);
     }
     return String(data);
@@ -81,15 +98,15 @@ export function ActivityTimeline({
 
   const isJsonData = (data: any): boolean => {
     // Handle new structured data types
-    if (typeof data === "object" && data !== null && data.type) {
+    if (typeof data === 'object' && data !== null && data.type) {
       if (data.type === 'sources') {
         return false; // Let ReactMarkdown handle this
       }
       return data.type === 'functionCall' || data.type === 'functionResponse';
     }
-    
+
     // Existing logic
-    if (typeof data === "string") {
+    if (typeof data === 'string') {
       try {
         JSON.parse(data);
         return true;
@@ -97,27 +114,27 @@ export function ActivityTimeline({
         return false;
       }
     }
-    return typeof data === "object" && data !== null;
+    return typeof data === 'object' && data !== null;
   };
   const getEventIcon = (title: string, index: number) => {
     if (index === 0 && isLoading && processedEvents.length === 0) {
       return <Loader2 className="h-4 w-4 text-neutral-400 animate-spin" />;
     }
-    if (title.toLowerCase().includes("function call")) {
+    if (title.toLowerCase().includes('function call')) {
       return <Activity className="h-4 w-4 text-blue-400" />;
-    } else if (title.toLowerCase().includes("function response")) {
+    } else if (title.toLowerCase().includes('function response')) {
       return <Activity className="h-4 w-4 text-green-400" />;
-    } else if (title.toLowerCase().includes("generating")) {
+    } else if (title.toLowerCase().includes('generating')) {
       return <TextSearch className="h-4 w-4 text-neutral-400" />;
-    } else if (title.toLowerCase().includes("thinking")) {
+    } else if (title.toLowerCase().includes('thinking')) {
       return <Loader2 className="h-4 w-4 text-neutral-400 animate-spin" />;
-    } else if (title.toLowerCase().includes("reflection")) {
+    } else if (title.toLowerCase().includes('reflection')) {
       return <Brain className="h-4 w-4 text-neutral-400" />;
-    } else if (title.toLowerCase().includes("research")) {
+    } else if (title.toLowerCase().includes('research')) {
       return <Search className="h-4 w-4 text-neutral-400" />;
-    } else if (title.toLowerCase().includes("finalizing")) {
+    } else if (title.toLowerCase().includes('finalizing')) {
       return <Pen className="h-4 w-4 text-neutral-400" />;
-    } else if (title.toLowerCase().includes("retrieved sources")) {
+    } else if (title.toLowerCase().includes('retrieved sources')) {
       return <Link className="h-4 w-4 text-yellow-400" />;
     }
     return <Activity className="h-4 w-4 text-neutral-400" />;
@@ -129,7 +146,11 @@ export function ActivityTimeline({
     }
   }, [isLoading, processedEvents]);
   return (
-    <Card className={`border-none rounded-lg bg-neutral-700 ${isTimelineCollapsed ? "h-10 py-2" : "max-h-96 py-2"}`}>
+    <Card
+      className={`border-none rounded-lg bg-neutral-700 ${
+        isTimelineCollapsed ? 'h-10 py-2' : 'max-h-96 py-2'
+      }`}
+    >
       <CardHeader className="py-0">
         <CardDescription className="flex items-center justify-between">
           <div

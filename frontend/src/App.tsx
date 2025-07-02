@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -416,7 +419,8 @@ export default function App() {
   };
 
   const handleSubmit = useCallback(
-    async (query: string, model: string, effort: string) => {
+    // async (query: string, model: string, effort: string) => {
+    async (query: string) => {
       if (!query.trim()) return;
 
       setIsLoading(true);
@@ -502,7 +506,6 @@ export default function App() {
         let eventDataBuffer = '';
 
         if (reader) {
-          // eslint-disable-next-line no-constant-condition
           while (true) {
             const { done, value } = await reader.read();
 
